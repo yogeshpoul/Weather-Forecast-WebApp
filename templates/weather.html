@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Weather Forecast</title>
+	<link href="https://fonts.googleapis.com/css?family=Archivo+Black&display=swap" rel="stylesheet">
+	<link href="style.css" rel="stylesheet">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js">
+	</script>
+	<style>
+		.mode {
+			float: right;
+			text-align: center;
+		}
+
+		.change {
+			cursor: pointer;
+			border: 1px solid #555;
+			border-radius: 40%;
+			width: 20px;
+			text-align: center;
+			padding: 5px;
+			margin-left: 8px;
+		}
+
+		.dark {
+			background-color: #222;
+			color: #e6e6e6;
+		}
+
+
+		body {
+			background-color: #a9edfc;
+			background-image: url('Pngtreewhite cloud weather climate8186765.png');
+			animation: moveClouds 20s linear infinite;
+		}
+
+		@keyframes moveClouds {
+			0% {
+				background-position: 0 0;
+			}
+
+			100% {
+				background-position: 1000px 0;
+			}
+		}
+
+		.cloud {
+			position: absolute;
+			top: 300px;
+			right: 40%;
+			width: 320px;
+			height: 100px;
+			background: #fff;
+			border-radius: 100px;
+			z-index: -101;
+		}
+
+		.cloud::before {
+			content: '';
+			position: absolute;
+			top: -50px;
+			left: 40px;
+			width: 110px;
+			height: 110px;
+			background: #fff;
+			border-radius: 50%;
+			box-shadow: 90px 0 0 30px #fff;
+		}
+
+		.rain {
+			position: relative;
+			display: flex;
+			z-index: -100;
+			padding: 0 600px;
+			top: 290px;
+		}
+
+		.rain span {
+			position: relative;
+			bottom: 10px;
+			width: 10px;
+			height: 10px;
+			background: rgb(250, 250, 250);
+			margin: 0 2px;
+			border-radius: 50%;
+			animation: animate 5s linear infinite;
+			animation-duration: calc(12s/var(--i));
+			transform-origin: bottom;
+		}
+
+		@keyframes animate {
+			0% {
+				transform: translateY(0) scale(1);
+			}
+
+			70% {
+				transform: translateY(300px) scale(1);
+			}
+
+			100% {
+				transform: translateY(300px) scale(0);
+			}
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class="mode">
+		Dark mode:
+		<span class="change">OFF</span>
+	</div>
+	<script>
+		$(".change").on("click", function () {
+			if ($("body").hasClass("dark")) {
+				$("body").removeClass("dark");
+				$(".change").text("OFF");
+			} else {
+				$("body").addClass("dark");
+				$(".change").text("ON");
+			}
+		});
+	</script>
+	<nav class="row" style="background: #ffaf53; color: white;">
+		<h1 class="text-center" style="--shadow-color: #ff1111;
+		--shadow-color-light: rgb(255, 12, 12);">Weather App</h1>
+	</nav>
+
+	<div class="cloud"></div>
+	</div>
+	<div class="rain">
+		<span style="--i:11"></span>
+		<span style="--i:12"></span>
+		<span style="--i:14"></span>
+		<span style="--i:16"></span>
+		<span style="--i:13"></span>
+		<span style="--i:10"></span>
+		<span style="--i:17"></span>
+		<span style="--i:18"></span>
+		<span style="--i:12"></span>
+		<span style="--i:19"></span>
+		<span style="--i:11"></span>
+		<span style="--i:9"></span>
+		<span style="--i:15"></span>
+		<span style="--i:11"></span>
+		<span style="--i:13"></span>
+		<span style="--i:12"></span>
+		<span style="--i:18"></span>
+		<span style="--i:14"></span>
+		<span style="--i:11"></span>
+	</div>
+
+	<div class="container">
+		<h1>Weather Forecast for {{ data.cityname }}, {{ data.country_code }}</h1>
+		<form method="POST">
+			<label for="city">Enter a city:</label>
+			<input type="text" id="city" name="city" value="{{ data.cityname }}">
+			<button type="submit">Submit</button>
+		</form>
+		<h2>Current Weather </h2>
+		<p>Temperature: {{ data.current_temp }} &#8451;</p>
+		<p>Description: {{ data.current_desc }}</p>
+		<h2 style="color: #000000; text-shadow: color: #fff;
+	text-shadow:
+		0 0 7px #fff,
+		0 0 10px #fff,
+		0 0 21px #fff,
+		0 0 42px #0fa,
+		0 0 82px #0fa,
+		0 0 92px #0fa,
+		0 0 102px #0fa,
+		0 0 151px #0fa;">Historical Weather</h2>
+		<table class="table">
+			<tr>
+				<th>Date</th>
+				<th>Temperature (C)</th>
+				<th>Description</th>
+			</tr>
+			{% for past in data.past %}
+			<tr>
+				<td>{{ past.date }}</td>
+				<td>{{ past.temperature }}</td>
+				<td>{{ past.description }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<br>
+		<h2 style="color: #000000; text-shadow: color: #fff;
+	text-shadow:
+		0 0 7px #fff,
+		0 0 10px #fff,
+		0 0 21px #fff,
+		0 0 42px #0fa,
+		0 0 82px #0fa,
+		0 0 92px #0fa,
+		0 0 102px #0fa,
+		0 0 151px #0fa;">Forecast</h2>
+		<table class="table">
+			<tr>
+				<th>Date</th>
+				<th>Temperature (C)</th>
+				<th>Description</th>
+			</tr>
+			{% for forecast in data.forecast %}
+			<tr>
+				<td>{{ forecast.date }}</td>
+				<td>{{ forecast.temperature }}</td>
+				<td>{{ forecast.description }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<br>
+		<h2 style="color: #000000; text-shadow: color: #fff;
+	text-shadow:
+		0 0 7px #fff,
+		0 0 10px #fff,
+		0 0 21px #fff,
+		0 0 42px #0fa,
+		0 0 82px #0fa,
+		0 0 92px #0fa,
+		0 0 102px #0fa,
+		0 0 151px #0fa;">Future Forecast</h2>
+		<table class="table">
+			<tr style="background-color: #b9ffa3;">
+				<th>Date</th>
+				<th>Temperature (C)</th>
+				<th>Description</th>
+			</tr>
+			{% for future in data.future %}
+			<tr>
+				<td>{{ future.date }}</td>
+				<td>{{ future.temperature }}</td>
+				<td>{{ future.description }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<p style="color: #fff;
+text-shadow:
+  0 0 7px #fff,
+  0 0 10px #fff,
+  0 0 21px #fff,
+  0 0 42px #f09,
+  0 0 82px #f09,
+  0 0 92px #f09,
+  0 0 102px #f09,
+  0 0 151px #f09; background-color: #000000; "> A project by : YOGESH POUL PATIL </p>
+	</div>
+
+</body>
+
+</html>
